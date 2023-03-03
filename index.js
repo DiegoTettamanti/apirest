@@ -1,97 +1,87 @@
 const express = require('express');
-const router = express.Router();
+const routes = require('./routes');
+const mongoose = require('mongoose');
+const store = require('./models/Clients.js');
+const Clients = require('./models/Clients.js');
 
-const clientController = require("../controller/clientController");
-const productsController = require("../controller/productsController");
-const cartsController = require("../controller/cartsController.js");
-const usersController = require("../controller/usersController.js");
+// const bodyParser = require('body-parser');
 
-// middle para proteger las rutas
-// const auth = require('../middleware/auth');
+// Cors permite que un cliente se conecta a otro servidor para el intercambio de recursos
 
-module.exports = function() {
-    
-    // Agrega nuevos clientes via POST
-    router.post('/clients',
-        clientController.newClient
-    );
-
-    // Obtener todos los clientes
-    router.get('/clients', 
-        clientController.mostrarClientes
-    );
-
-    // Muestra un cliente en especifico (ID)
-    router.get('/clients/:idClient', 
-        clientController.mostrarCliente );
-
-    // Actualizar Cliente
-    router.put('/clients/:idClient', 
-        clientController.actualizarCliente);
-
-    // Eliminar Cliente
-    router.delete('/clients/:idClient', 
-        clientController.eliminarCliente);
-
-    /** PRODUCTOS */
-    // nuevos productos
-    router.post('/products', 
-        productsController.subirArchivo,
-        productsController.nuevoProducto
-    );
-
-    // Muestra todos los productos
-    router.get('/products', 
-        productsController.mostrarProductos);
-
-    // muestra un producto en especifico por su ID
-    router.get('/products/:idProduct', 
-        productsController.mostrarProducto);
-
-    // Actualizar Productos
-    router.put('/products/:idProducto', 
-        productsController.subirArchivo,
-        productsController.actualizarProducto
-    );
-
-    // Eliminar Productos
-    router.delete('/products/:idProduct', 
-        productsController.eliminarProducto
-    );
-
-    // Busqueda de Productos
-    router.post('/products/busqueda/:query',
-        productsController.buscarProducto);
-
-    /*** PEDIDOS */
-    // Agrega nuevos pedidos
-    router.post('/carts/nuevo/:idUsuario', 
-        cartsController.nuevoPedido);
-
-    // mostrar todos los pedidos
-    router.get('/carts', 
-        cartsController.mostrarPedidos);
-
-    // Mostrar un pedido por su ID
-    router.get('/pedidos/:idPedido',
-    cartsController.mostrarPedido);
-
-    // Actualizar pedidos
-    router.put('/carts/:idcarts', 
-    cartsController.actualizarPedido);
-
-    // Elimina un pedido
-    router.delete('/carts/:idCart', 
-    cartsController.eliminarPedido);
-
-
-    // Usuarios
-    router.post('/crear-cuenta', 
-        auth,
-        usersController.registrarUsuario
-    );
+// const cors = require('cors');
 
 
 
-    return router;
-}
+// crear el servidor
+const app = express();
+
+
+// conectar mongo
+const mongoURL = 'mongodb+srv://Tettacorp:Fullstack23@cluster17.63yiu.mongodb.net/ecommerce?retryWrites=true&w=majority'
+//mongoose.Promise = global.Promise;
+mongoose.connect(mongoURL, {
+     useNewUrlParser: true,
+     useUnifiedTopology: true
+ });
+ mongoose.set('strictQuery', true)
+
+//Midleware
+app.use(express.json({limit: "50mb"}))
+
+app.post("/api/clients", (req, res) => {
+    let clientdata = req.body
+    let mongoRecords = []
+    clientdata.forEach(client => {
+        mongoRecords.push({
+            name: client.name,
+            lastname: client.lastname,
+            enterprise: client.enterprise,
+            email: client.email,
+            phone: client.phone
+        })
+    });
+    Clients.create(mongoRecords, (err, records)=>{
+     if(err){
+        res.status(500).send(err)
+     }   
+     else{
+        res.status(200).send(records)
+    }})
+})
+
+
+// habilitar bodyparser
+// app.use(bodyParser.json());
+// // app.use(bodyParser.urlencoded({extended: true}));
+
+// Habilitar cors
+// app.use(cors());
+
+app.get("/", (req, res) => {
+    res.send("Hola Mundo")})
+
+// // Rutas de la app
+// app.use('/', routes());
+
+// // carpeta publica
+app.use(express.static('uploads'));
+
+
+
+//Midleware
+app.use(express.json({limit: "50mb"}))
+
+
+//Habilitar PUG
+app.set('view engine', 'pug');
+app.set('views', './views');
+
+// // carpeta publica
+
+app.use(express.static('public'));
+
+
+// puerto
+const port = 8080
+app.listen(port, ()=>{
+    console.log(`Server is listening at http://localhost:${8080}`)})
