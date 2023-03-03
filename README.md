@@ -1,2 +1,2 @@
 # apirest
-Desarrollo Api Rest ecommerce Con Node (Backend)y React (Front)
+Api Rest ecommerce Con Node y React en el Front

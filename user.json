@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 [
    
@@ -26,4 +27,34 @@
             "telefono": "+3599090861746"
         }
     
+=======
+
+[
+   
+       {
+            
+            "nombre": "Fredrick",
+            "apellido": "Franecki",
+            "empresa": "Usuriaga",
+            "email": "laury.crooks@yahoo.com",
+            "telefono": "+8775894928440"
+        },
+        {
+            
+            "nombre": "Jaren",
+            "apellido": "Davis",
+            "empresa": "Cambiaso",
+            "email": "wkirlin@yahoo.com",
+            "telefono": "+6526901231026"
+        },
+        {
+            
+            "nombre": "Anderson",
+            "apellido": "Stracke",
+            "empresa": "Bochini",
+            "email": "shields.charley@hamill.biz",
+            "telefono": "+3599090861746"
+        }
+    
+>>>>>>> 8e635e17b748043b50177a8a614ffde285a923c4
 ]

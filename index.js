@@ -66,7 +66,22 @@ app.get("/", (req, res) => {
 // // carpeta publica
 app.use(express.static('uploads'));
 
+
+
+//Midleware
+app.use(express.json({limit: "50mb"}))
+
+
+//Habilitar PUG
+app.set('view engine', 'pug');
+app.set('views', './views');
+
+// // carpeta publica
+
+app.use(express.static('public'));
+
+
 // puerto
 const port = 8080
 app.listen(port, ()=>{
-    console.log(`Server is listening at http://localhost:${8080}`)});
+    console.log(`Server is listening at http://localhost:${8080}`)})
